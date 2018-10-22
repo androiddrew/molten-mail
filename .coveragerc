@@ -1,0 +1,6 @@
+[run]
+source = molten_mail
+omit = test*
+
+[report]
+show_missing = True
