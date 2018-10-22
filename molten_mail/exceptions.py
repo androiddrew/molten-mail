@@ -5,7 +5,7 @@ class MailUnicodeDecodeError(UnicodeDecodeError):
 
     def __str__(self):
         original = UnicodeDecodeError.__str__(self)
-        return '%s. You passed in %r (%s)' % (original, self.obj, type(self.obj))
+        return "%s. You passed in %r (%s)" % (original, self.obj, type(self.obj))
 
 
 class BadHeaderError(Exception):
