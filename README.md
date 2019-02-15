@@ -11,7 +11,11 @@ Provides a simple interface to set up SMTP with your [Molten](https://github.com
 
 ## Installation
 
-`$  pip install molten-mail`
+`pip install molten-mail`
+
+If you plan on using HTML templates you will need to ensure that Jinja2 is install:
+
+`pip install molten-mail[templates]`
 
 ## Usage
 

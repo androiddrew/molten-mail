@@ -33,5 +33,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    extras_require={"testing": test_requirements},
+    extras_require={"testing": test_requirements,
+                    "templates": ["jinja2"]},
 )
