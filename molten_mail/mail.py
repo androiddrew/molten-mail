@@ -4,7 +4,6 @@ import time
 import unicodedata
 
 from inspect import Parameter
-from typing import TypeVar
 from email import charset, policy
 from email.encoders import encode_base64
 from email.mime.base import MIMEBase
@@ -12,12 +11,11 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate, formataddr, make_msgid, parseaddr
+from molten import Settings
 
 from .exceptions import MailUnicodeDecodeError, BadHeaderError
 
 charset.add_charset("utf-8", charset.SHORTEST, None, "utf-8")
-
-Settings = TypeVar("Settings")
 
 
 def force_text(s, encoding="utf-8", errors="strict"):
