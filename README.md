@@ -184,9 +184,9 @@ app = App(
 
 ## Testing
 
-To run the test suite with coverage first install the package in editable mode with it's testing requirements:
+To run the test suite with coverage first install the package in editable mode with it's full testing requirements:
 
-`$ pip install -e ".[testing]"`
+`$ pip install -e ".[dev]"`
 
 To run the project's tests
 
