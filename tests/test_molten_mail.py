@@ -446,7 +446,7 @@ def test_message_charset():
 
 
 def test_empty_subject_header():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(sender="from@example.com", recipients=["foo@bar.com"])
     msg.body = "normal ascii text"
     mail.send(msg)
@@ -456,13 +456,13 @@ def test_empty_subject_header():
 def test_message_default_sender():
     msg = Message(recipients=["foo@bar.com"])
     msg.body = "normal ascii text"
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.send(msg)
     assert msg.sender == "fake@example.com"
 
 
 def test_mail_send_message():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.send = MagicMock()
     mail.send_message(
         sender="from@example.com", recipients=["foo@bar.com"], body="normal ascii text"
@@ -471,7 +471,7 @@ def test_mail_send_message():
 
 
 def test_message_ascii_attachments_config():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.mail_ascii_attachments = True
     msg = Message(
         sender="from@example.com", subject="subject", recipients=["foo@bar.com"]
@@ -491,7 +491,7 @@ def test_message_as_bytes():
 
 @patch("molten_mail.mail.smtplib.SMTP")
 def test_connection_configure_host_non_ssl(mock_smtp):
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.mail_suppress_send = False
     mail.mail_use_tls = True
     mock_smtp.return_value = MagicMock()
@@ -503,7 +503,7 @@ def test_connection_configure_host_non_ssl(mock_smtp):
 
 @patch("molten_mail.mail.smtplib.SMTP_SSL")
 def test_connection_configure_host_ssl(mock_smtp_ssl):
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.mail_suppress_send = False
     mail.mail_use_tls = False
     mail.mail_use_ssl = True
@@ -513,7 +513,7 @@ def test_connection_configure_host_ssl(mock_smtp_ssl):
 
 
 def test_connection_send_message():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     with mail.connect() as conn:
         conn.send = MagicMock()
         conn.send_message(
@@ -526,7 +526,7 @@ def test_connection_send_message():
 
 @patch("molten_mail.mail.smtplib.SMTP")
 def test_connection_send_single(mock_smtp):
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.mail_suppress_send = False
     msg = Message(
         sender="from@example.com", recipients=["foo@bar.com"], body="normal ascii text"
@@ -545,7 +545,7 @@ def test_connection_send_single(mock_smtp):
 
 
 def test_connection_send_ascii_recipient_single():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(
         sender="from@example.com", recipients=["foo@bar.com"], body="normal ascii text"
     )
@@ -562,7 +562,7 @@ def test_connection_send_ascii_recipient_single():
 
 
 def test_connection_send_non_ascii_recipient_single():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     with mail.connect() as conn:
         with patch.object(conn, "host") as host:
             msg = Message(
@@ -584,7 +584,7 @@ def test_connection_send_non_ascii_recipient_single():
 
 @patch("molten_mail.mail.smtplib.SMTP")
 def test_connection_send_many(mock_smtp):
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     mail.mail_suppress_send = False
     mail.mail_max_emails = 50
     mock_smtp.return_value = MagicMock(spec=SMTP)
@@ -605,7 +605,7 @@ def test_connection_send_many(mock_smtp):
 
 
 def test_bad_header_subject():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(subject="testing\r\n", body="testing", recipients=["to@example.com"])
 
     with pytest.raises(BadHeaderError):
@@ -613,7 +613,7 @@ def test_bad_header_subject():
 
 
 def test_bad_header_subject_whitespace():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(subject="\t\r\n", body="testing", recipients=["to@example.com"])
 
     with pytest.raises(BadHeaderError):
@@ -626,7 +626,7 @@ def test_bad_header_subject_with_no_trailing_whitespace():
 
     This is a bit of a strange test but we aren't changing the bad_header check from flask_mail
     """
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(
         subject="testing\r\ntesting", body="testing", recipients=["to@example.com"]
     )
@@ -636,7 +636,7 @@ def test_bad_header_subject_with_no_trailing_whitespace():
 
 
 def test_bad_header_subject_trailing_whitespace():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(
         subject="testing\r\n\t", body="testing", recipients=["to@example.com"]
     )
@@ -646,7 +646,7 @@ def test_bad_header_subject_trailing_whitespace():
 
 
 def test_bad_header_with_a_newline():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(
         subject="\ntesting\r\ntesting", body="testing", recipients=["to@example.com"]
     )
@@ -656,7 +656,7 @@ def test_bad_header_with_a_newline():
 
 
 def test_bad_header_with_newline_in_sender():
-    mail = Mail(test_mail_options)
+    mail = Mail.config_from_settings(test_mail_options)
     msg = Message(
         subject="testing",
         body="testing",

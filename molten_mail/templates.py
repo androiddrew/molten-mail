@@ -9,6 +9,9 @@ except ImportError:  # pragma: no cover
 
 class MailTemplates:
     """Renders jinja2 templates for use in html email bodies.
+
+    Unlike the molten.contrib.templates this object does not return a
+    molten Response object, but a rendered string of the provided template.
     """
 
     __slots__ = ["environment"]
@@ -29,7 +32,7 @@ class MailTemplates:
 
 
 class MailTemplatesComponent:
-    """A component that builds a jinja2 template renderer for u.
+    """A component that builds a jinja2 template renderer for email templates.
 
     Parameters:
       path: The path to a folder containing your templates.

@@ -428,27 +428,64 @@ class Connection:
 
 
 class Mail:
-    """Manages email messaging"""
+    """Manages email messaging."""
 
-    def __init__(self, mail_options):
+    def __init__(
+        self,
+        server: str = "localhost",
+        user: str = None,
+        password: str = None,
+        port: int = 25,
+        use_tls: bool = False,
+        use_ssl: bool = False,
+        default_sender: str = None,
+        debug: bool = False,
+        max_emails: int = None,
+        suppress_send: bool = False,
+        ascii_attachments: bool = False,
+    ):
         """
-        Configure a new Mail manager
-
-        Args:
-        mail_options: A `molten.Settings` dictionary
+        Configure a new Mail manager.
         """
 
-        self.mail_server = mail_options.get("MAIL_SERVER", "localhost")
-        self.mail_user = mail_options.get("MAIL_USERNAME")
-        self.mail_password = mail_options.get("MAIL_PASSWORD")
-        self.mail_port = mail_options.get("MAIL_PORT", 25)
-        self.mail_use_tls = mail_options.get("MAIL_USE_TLS", False)
-        self.mail_use_ssl = mail_options.get("MAIL_USE_SSL", False)
-        self.mail_default_sender = mail_options.get("MAIL_DEFAULT_SENDER")
-        self.mail_debug = mail_options.get("MAIL_DEBUG", False)
-        self.mail_max_emails = mail_options.get("MAIL_MAX_EMAILS")
-        self.mail_suppress_send = mail_options.get("MAIL_SUPPRESS_SEND", False)
-        self.mail_ascii_attachments = mail_options.get("MAIL_ASCII_ATTACHMENTS", False)
+        self.mail_server = server
+        self.mail_user = user
+        self.mail_password = password
+        self.mail_port = port
+        self.mail_use_tls = use_tls
+        self.mail_use_ssl = use_ssl
+        self.mail_default_sender = default_sender
+        self.mail_debug = debug
+        self.mail_max_emails = max_emails
+        self.mail_suppress_send = suppress_send
+        self.mail_ascii_attachments = ascii_attachments
+
+    @classmethod
+    def config_from_settings(cls, settings: Settings):
+        """Class method for configuring a Mail instance from a molten.Settings object.
+
+        Supports Setting key names in Upper or Lower case.
+        """
+
+        _mail_settings = {
+            k.lower(): v
+            for k, v in settings.items()
+            if k.startswith("MAIL_") or k.startswith("mail_")
+        }
+
+        return cls(
+            server=_mail_settings.get("mail_server", "localhost"),
+            user=_mail_settings.get("mail_username"),
+            password=_mail_settings.get("mail_password"),
+            port=_mail_settings.get("mail_port", 25),
+            use_tls=_mail_settings.get("mail_use_tls", False),
+            use_ssl=_mail_settings.get("mail_use_ssl", False),
+            default_sender=_mail_settings.get("mail_default_sender"),
+            debug=_mail_settings.get("mail_debug", False),
+            max_emails=_mail_settings.get("mail_max_emails"),
+            suppress_send=_mail_settings.get("mail_suppress_send", False),
+            ascii_attachments=_mail_settings.get("mail_ascii_attachements", False),
+        )
 
     def send(self, message: Message):
         """
@@ -486,4 +523,4 @@ class MailComponent:
         return parameter.annotation is Mail
 
     def resolve(self, settings: Settings) -> Mail:
-        return Mail(settings)
+        return Mail.config_from_settings(settings)
