@@ -12,7 +12,7 @@ dev_requirements = ["pytest", "pytest-cov", "tox", "jinja2>=2.10,<3.0"]
 
 setup(
     name="molten_mail",
-    version="version='0.1.0'",
+    version="0.1.0",
     description="A simple email component for the Molten web framework",
     long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",
