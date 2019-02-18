@@ -1,26 +1,20 @@
 from setuptools import setup, find_packages
 
-with open('README.md') as readme_file:
+with open("README.md") as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.md') as history_file:
+with open("HISTORY.md") as history_file:
     history = history_file.read()
 
-requirements = [
-    "molten>=0.7.1",
-]
+requirements = ["molten>=0.7.1"]
 
-test_requirements = [
-    'pytest',
-    'pytest-cov',
-    'tox'
-]
+dev_requirements = ["pytest", "pytest-cov", "tox", "jinja2>=2.10,<3.0"]
 
 setup(
     name="molten_mail",
-    version="0.0.0",
+    version="version='0.1.0'",
     description="A simple email component for the Molten web framework",
-    long_description=readme + '\n\n' + history,
+    long_description=readme + "\n\n" + history,
     long_description_content_type="text/markdown",
     author="Drew Bednar",
     author_email="drew@androiddrew.com",
@@ -39,5 +33,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
     ],
-    extras_require={"testing": test_requirements},
+    extras_require={"dev": dev_requirements,
+                    "templates": ["jinja2>=2.10,<3.0"]},
 )
